@@ -85,3 +85,10 @@ body {
 .orange {
   background-color: #FF9500;
 }
+
+.calculator, .calculator * {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}

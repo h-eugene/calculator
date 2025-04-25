@@ -146,3 +146,18 @@ function displaySymbol(e) {
 }
 
 document.querySelectorAll(".btn").forEach(btn => btn.addEventListener("click", displaySymbol));
+document.querySelector('.calculator').addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+  return false;
+});
+
+function hover(e) {
+  e.target.style.opacity = 0.7;
+}
+
+function unhover(e) {
+  e.target.style.opacity = 1;
+}
+
+document.querySelectorAll(".btn").forEach(btn => btn.addEventListener("mouseenter", hover));
+document.querySelectorAll(".btn").forEach(btn => btn.addEventListener("mouseleave", unhover));
