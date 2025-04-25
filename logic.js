@@ -146,10 +146,7 @@ function displaySymbol(e) {
 }
 
 document.querySelectorAll(".btn").forEach(btn => btn.addEventListener("click", displaySymbol));
-document.querySelector('.calculator').addEventListener('contextmenu', function(e) {
-  e.preventDefault();
-  return false;
-});
+
 
 function hover(e) {
   e.target.style.opacity = 0.7;
