@@ -1,0 +1,80 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+}
+
+body {
+  background-color: black;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  opacity: 0.8;
+  background-color:hsla(0,100%,50%,1);
+  background-image:
+  radial-gradient(at 40% 20%, hsla(28,100%,74%,1) 0px, transparent 50%),
+  radial-gradient(at 80% 0%, hsla(189,100%,56%,1) 0px, transparent 50%),
+  radial-gradient(at 0% 50%, hsla(355,100%,93%,1) 0px, transparent 50%),
+  radial-gradient(at 80% 50%, hsla(340,100%,76%,1) 0px, transparent 50%),
+  radial-gradient(at 0% 100%, hsla(22,100%,77%,1) 0px, transparent 50%),
+  radial-gradient(at 80% 100%, hsla(242,100%,70%,1) 0px, transparent 50%),
+  radial-gradient(at 0% 0%, hsla(343,100%,76%,1) 0px, transparent 50%);
+}
+
+.calculator {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  padding: 25px 10px;
+  background-color: black;
+  height: 600px;
+  width: 320px;
+  border-radius: 24px;
+}
+
+.result {
+  flex: 1;
+}
+
+.btns {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  gap: 6px;
+}
+
+.row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.btn {
+  flex: 1 0 20%;
+  aspect-ratio: 1 / 1;
+  border-radius: 100%;
+  background-color: #1C1C1C;
+  display: flex;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+}
+
+.btn img {
+  width: 70%;
+  height: auto;
+  object-fit: contain;
+}
+
+.gray {
+  background-color: #505050;
+}
+
+.orange {
+  background-color: #FF9500;
+}
