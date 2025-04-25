@@ -33,11 +33,19 @@ body {
   height: 600px;
   width: 320px;
   border-radius: 24px;
+  color: white;
+  font-size: 32px;
 }
 
 .result {
   flex: 1;
+  justify-content: flex-end;
+  display: flex;
+  align-items: flex-end;
+  padding: 18px 0;
+  font-size: 48px;
 }
+
 
 .btns {
   flex: 2;
@@ -59,16 +67,15 @@ body {
   border-radius: 100%;
   background-color: #1C1C1C;
   display: flex;
-  color: white;
   justify-content: center;
   align-items: center;
-  font-size: 32px;
 }
 
 .btn img {
-  width: 70%;
+  width: 60%;
   height: auto;
   object-fit: contain;
+  pointer-events: none;
 }
 
 .gray {
