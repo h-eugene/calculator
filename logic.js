@@ -88,19 +88,22 @@ function displaySymbol(e) {
     "modulo": "%",
   };
   let id = e.target.id;
-  if (!id) {
+  if (id.slice(0,3) === "btn") {
     let symbol = e.target.textContent.trim();
     let content = result.textContent.trim();
     if (content === "0") {
-      if (symbol === "," && !content.includes(",")) {
-        result.textContent += ",";
+      if (symbol === ".") {
+        result.textContent += ".";
       } else {
         result.textContent = symbol;
       }
     } else {
-      if (symbol === ",") {
-        if (!content.includes(",")) {
-            result.textContent += ",";
+      if (symbol === ".") {
+        let ops = {"+":1, "-":1, "%":2, "×":2, "÷":2};
+        let l = content.split("").findLastIndex(el => el in ops);
+        let number = content.slice(l+1);
+        if (!number.includes(".")) {
+            result.textContent += ".";
         }
       } else {
         result.textContent += symbol;
@@ -145,9 +148,27 @@ function displaySymbol(e) {
   }
 }
 
+function keyHandler(e) {
+  let allowed = {
+    "1": "#btn1", "2": "#btn2", "3": "#btn3",
+    "4": "#btn4", "5": "#btn5", "6": "#btn6",
+    "7": "#btn7", "8": "#btn8", "9": "#btn9",
+    "0": "#btn0", ".": "#btnDot",
+    "*": "#multiply",
+    "-": "#subtract",
+    "+": "#add",
+    "%": "#modulo",
+    "/": "#divide",
+  }
+  let id = allowed[e.key];
+  if (id) {
+    let btn = document.querySelector(id);
+    btn.dispatchEvent(new Event("click"));
+  }
+}
+
 document.querySelectorAll(".btn").forEach(btn => btn.addEventListener("click", displaySymbol));
-
-
+document.addEventListener("keydown", keyHandler);
 function hover(e) {
   e.target.style.opacity = 0.7;
 }
