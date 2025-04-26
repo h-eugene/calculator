@@ -103,6 +103,9 @@ function displaySymbol(e) {
         let l = content.split("").findLastIndex(el => el in ops);
         let number = content.slice(l+1);
         if (!number.includes(".")) {
+            if (l!=-1) {
+              result.textContent += "0";
+            }
             result.textContent += ".";
         }
       } else {
@@ -159,16 +162,43 @@ function keyHandler(e) {
     "+": "#add",
     "%": "#modulo",
     "/": "#divide",
+    "=": "#equal",
+    "Enter": "#equal",
+    "Backspace": "#backspace",
   }
   let id = allowed[e.key];
   if (id) {
     let btn = document.querySelector(id);
+    btn.style.opacity = 0.7;
     btn.dispatchEvent(new Event("click"));
+  }
+}
+
+function keyUp(e) {
+  let allowed = {
+    "1": "#btn1", "2": "#btn2", "3": "#btn3",
+    "4": "#btn4", "5": "#btn5", "6": "#btn6",
+    "7": "#btn7", "8": "#btn8", "9": "#btn9",
+    "0": "#btn0", ".": "#btnDot",
+    "*": "#multiply",
+    "-": "#subtract",
+    "+": "#add",
+    "%": "#modulo",
+    "/": "#divide",
+    "=": "#equal",
+    "Enter": "#equal",
+    "Backspace": "#backspace",
+  }
+  let id = allowed[e.key];
+  if (id) {
+    let btn = document.querySelector(id);
+    btn.style.opacity = 1;
   }
 }
 
 document.querySelectorAll(".btn").forEach(btn => btn.addEventListener("click", displaySymbol));
 document.addEventListener("keydown", keyHandler);
+document.addEventListener("keyup", keyUp);
 function hover(e) {
   e.target.style.opacity = 0.7;
 }
@@ -176,6 +206,7 @@ function hover(e) {
 function unhover(e) {
   e.target.style.opacity = 1;
 }
+
 
 document.querySelectorAll(".btn").forEach(btn => btn.addEventListener("mouseenter", hover));
 document.querySelectorAll(".btn").forEach(btn => btn.addEventListener("mouseleave", unhover));
