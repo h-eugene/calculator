@@ -1,98 +1,81 @@
+function add(a , b) {
+  return a + b;
+}
+
+function subtract(a, b) {
+  return a - b;
+}
+
+function multiply(a, b) {
+  return a * b;
+}
+
+function divide(a, b) {
+  return a / b;
+}
+
+function modulo(a,b) {
+  return (a%b + b) % b;
+}
+
 function operate(op, a, b) {
   switch (op) {
-    case "+": (a,b)=> a+b;
-    case "-": (a,b)=> a-b;
-    case "×": (a,b)=> a*b;
-    case "÷": (a,b)=> a/b;
-    case "%": (a,b)=> (a%b + b) % b;
+    case "+": return add(a,b);
+    case "-": return subtract(a,b);
+    case "×": return multiply(a,b);
+    case "÷": return divide(a,b);
+    case "%": return modulo(a,b);
     default:
       return NaN;
   }
 }
 
 function evaluate(expression) {
-  const tokens = [];
-  let currentNumber = '';
-  
-  for (let i = 0; i < expression.length; i++) {
-    const char = expression[i];
-    if ("+-×÷%".includes(char)) {
-      if (currentNumber) {
-        tokens.push(parseFloat(currentNumber));
-        currentNumber = '';
+  let result = []
+  let ops = {"+":1, "-":1, "%":2, "×":2, "÷":2};
+  let l = 0;
+  for (let i =0; i<expression.length; i++) {
+    if (expression[i] in ops) {
+      
+      result.push(+expression.slice(l,i));
+
+      if (i!= expression.length - 1) {
+        result.push(expression[i]);
       }
-      tokens.push(char);
-    } else {
-      currentNumber += char;
+      l = i + 1;
+    } else if (i === expression.length - 1) {
+      result.push(+expression.slice(l,i+1));
     }
-  }
-  
-  if (currentNumber) {
-    tokens.push(parseFloat(currentNumber));
   }
 
-  for (let i = 1; i < tokens.length; i += 2) {
-    if (tokens[i] === '×' || tokens[i] === '÷' || tokens[i] === '%') {
-      const a = tokens[i-1];
-      const op = tokens[i];
-      const b = tokens[i+1];
-      
-      if (op === '÷' && b === 0) {
-        return "Error: Division by zero";
+  for (let i = 2; i<result.length; i++) {
+    if (ops[result[i-1]] === 2) {
+ 
+      let [a,op,b] = [result[i-2], result[i-1], result[i]];
+      let temp1 = 0;
+      if (result[i-3] == "-") {
+        a = -a;
+        temp1 = 1 + (i===4);
       }
-      
-      let result;
-      switch (op) {
-        case '×': result = a * b; break;
-        case '÷': result = a / b; break;
-        case '%': result = ((a % b) + b) % b; break;
+      let temp2 = 0;
+      if (b==0) {
+        b = -result[i+2];
+        temp2 = 2;
       }
-      
-      tokens.splice(i-1, 3, result);
-      i -= 2;
+      let value = operate(op, a, b);
+      result.splice(i-2 - temp1,3 + temp1 + temp2,value);
+      i-=2+temp1;
     }
   }
-  
-  let result = tokens[0];
-  for (let i = 1; i < tokens.length; i += 2) {
-    const op = tokens[i];
-    const b = tokens[i+1];
-    
-    if (op === '+') {
-      result += b;
-    } else if (op === '-') {
-      result -= b;
+  for (let i = 2; i<result.length; i++) {
+    if (ops[result[i-1]] === 1) {
+      let [a,op,b] = [result[i-2], result[i-1], result[i]];
+      let value = operate(op, a, b);
+      result.splice(i-2,3,value);
+      i-=2;
     }
   }
-  
-  return result;
-}
-
-function changeSign() {
-  const result = document.querySelector(".result");
-  const content = result.textContent;
-  
-  if (content === "0" || content === "") return;
-  
-  const ops = {"+": true, "-": true, "%": true, "×": true, "÷": true};
-  const lastOperatorIndex = Array.from(content).findLastIndex(c => c in ops);
-  
-  if (lastOperatorIndex === -1) {
-    if (content.startsWith("-")) {
-      result.textContent = content.substring(1);
-    } else {
-      result.textContent = "-" + content;
-    }
-  } else {
-    const afterOperator = content.substring(lastOperatorIndex + 1);
-    const beforeOperator = content.substring(0, lastOperatorIndex + 1);
-    
-    if (afterOperator.startsWith("-")) {
-      result.textContent = beforeOperator + afterOperator.substring(1);
-    } else {
-      result.textContent = beforeOperator + "-" + afterOperator;
-    }
-  }
+  return result[0];
 }
 
 function displaySymbol(e) {
@@ -168,34 +151,47 @@ function displaySymbol(e) {
   }
 }
 
-const keyboardMap = {
-  "1": "#btn1", "2": "#btn2", "3": "#btn3",
-  "4": "#btn4", "5": "#btn5", "6": "#btn6",
-  "7": "#btn7", "8": "#btn8", "9": "#btn9",
-  "0": "#btn0", ".": "#btnDot",
-  "*": "#multiply",
-  "-": "#subtract",
-  "+": "#add",
-  "%": "#modulo",
-  "/": "#divide",
-  "=": "#equal",
-  "Enter": "#equal",
-  "Backspace": "#backspace",
-};
-
 function keyHandler(e) {
-  const id = keyboardMap[e.key];
+  let allowed = {
+    "1": "#btn1", "2": "#btn2", "3": "#btn3",
+    "4": "#btn4", "5": "#btn5", "6": "#btn6",
+    "7": "#btn7", "8": "#btn8", "9": "#btn9",
+    "0": "#btn0", ".": "#btnDot",
+    "*": "#multiply",
+    "-": "#subtract",
+    "+": "#add",
+    "%": "#modulo",
+    "/": "#divide",
+    "=": "#equal",
+    "Enter": "#equal",
+    "Backspace": "#backspace",
+  }
+  let id = allowed[e.key];
   if (id) {
-    const btn = document.querySelector(id);
+    let btn = document.querySelector(id);
     btn.style.opacity = 0.7;
     btn.dispatchEvent(new Event("click"));
   }
 }
 
 function keyUp(e) {
-  const id = keyboardMap[e.key];
+  let allowed = {
+    "1": "#btn1", "2": "#btn2", "3": "#btn3",
+    "4": "#btn4", "5": "#btn5", "6": "#btn6",
+    "7": "#btn7", "8": "#btn8", "9": "#btn9",
+    "0": "#btn0", ".": "#btnDot",
+    "*": "#multiply",
+    "-": "#subtract",
+    "+": "#add",
+    "%": "#modulo",
+    "/": "#divide",
+    "=": "#equal",
+    "Enter": "#equal",
+    "Backspace": "#backspace",
+  }
+  let id = allowed[e.key];
   if (id) {
-    const btn = document.querySelector(id);
+    let btn = document.querySelector(id);
     btn.style.opacity = 1;
   }
 }
